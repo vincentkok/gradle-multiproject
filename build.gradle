@@ -1,0 +1,40 @@
+def coberturaPluginRepository = 'https://github.com/valkolovos/gradle_cobertura/raw/master/ivy'
+apply from: "${coberturaPluginRepository}/gradle_cobertura/gradle_cobertura/1.0-rc4/coberturainit.gradle"
+
+buildscript {
+  	dependencies {
+    	classpath group:'org.ajoberstar', name:'gradle-plugins', version:'0.1.1'
+  	}
+
+	repositories {
+	     mavenCentral()
+	}
+}
+
+allprojects {
+	repositories {
+	     mavenCentral()
+	}
+}	
+
+cobertura {
+    coverageDatafile = file('cobertura.ser')
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'eclipse-wtp'
+    apply plugin: 'pmd'
+
+    dependencies {
+        testCompile 'junit:junit:4.8.2'
+		testRuntime group:'net.sourceforge.cobertura', name:'cobertura', version:'1.9.4.1'
+		pmd group:'pmd', name:'pmd', version:'4.2.5'
+    }
+
+    version = '1.0'
+
+    jar {
+        manifest.attributes provider: 'gradle'
+    }
+}
